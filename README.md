@@ -1,9 +1,4 @@
 # SCMS_metadata
-
-### Detailed Documentation for Using the Scripts
-
-This documentation will guide you through the process of using the two provided scripts to fetch metadata from Azure Blockchain resources, create an Excel file, and then filter that data into a new Excel file.
-
 ---
 
 ### Prerequisites
@@ -42,10 +37,6 @@ This script will fetch the metadata from Azure Blockchain resources and create a
 - Fetches blockchain member, node, and contract metadata using Azure Resource Management and Cosmos DB.
 - Adds columns with `_Y` suffix for each data point.
 - Writes the metadata to an Excel file with separate sheets for members, nodes, and contracts.
-- Adjusts the column widths to fit the text.
-
-**Changes You Might Need**:
-- **None**: The script reads all necessary configuration from the `credentials.txt` file.
 
 **Running the Script**:
 ```sh
