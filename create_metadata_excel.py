@@ -77,10 +77,10 @@ def adjust_column_widths(sheet):
         length = max(len(str(cell.value)) for cell in column_cells)
         sheet.column_dimensions[column_cells[0].column_letter].width = length + 2
 
-# Function to add _Y columns
+# Function to add _Y columns and populate with "Y"
 def add_y_columns(dataframe):
     for col in dataframe.columns:
-        dataframe[f"{col}_Y"] = dataframe[col]
+        dataframe[f"{col}_Y"] = dataframe[col].apply(lambda x: 'Y' if pd.notna(x) else '')
     return dataframe
 
 if __name__ == "__main__":
