@@ -41,7 +41,7 @@ def get_blockchain_nodes_metadata(resource_client, resource_group, blockchain_me
         print(f"Error fetching blockchain nodes metadata: {e}")
         return []
 
-def get_blockchain_contracts_metadata(credentials):
+def get_blockchain_contracts_metadata(credentials, additional_filters=None):
     try:
         endpoint = credentials['COSMOS_DB_ENDPOINT']
         key = credentials['COSMOS_DB_KEY']
@@ -54,7 +54,12 @@ def get_blockchain_contracts_metadata(credentials):
 
         query = "SELECT * FROM c WHERE c.blockchain_member = @blockchain_member"
         parameters = [{'name': '@blockchain_member', 'value': credentials['AZURE_BLOCKCHAIN_MEMBER_NAME']}]
-        
+
+        if additional_filters:
+            for filter_name, filter_value in additional_filters.items():
+                query += f" AND c.{filter_name} = @{filter_name}"
+                parameters.append({'name': f'@{filter_name}', 'value': filter_value})
+
         contracts = list(container.query_items(
             query=query,
             parameters=parameters,
@@ -92,7 +97,11 @@ if __name__ == "__main__":
         
         member_metadata = get_blockchain_member_metadata(resource_client, resource_group_name, blockchain_member_name)
         nodes_metadata = get_blockchain_nodes_metadata(resource_client, resource_group_name, blockchain_member_name)
-        contracts_metadata = get_blockchain_contracts_metadata(credentials)
+        
+        additional_filters = {
+            'deployed_date': '2022-01-01'
+        }
+        contracts_metadata = get_blockchain_contracts_metadata(credentials, additional_filters)
         
         # Create dataframes
         member_df = pd.DataFrame([member_metadata])
